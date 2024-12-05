@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Siswa, Data Guru, Piket Kelas, Struktur Kelas, Galeri Foto, Jadwal Pelajaran, Kegiatan Kelas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #ffffff;
+        }
+
+        /* Header pertama untuk judul halaman */
+        #header-1 {
+            background-color: #3f7c52;
+            color: #fff;
+            text-align: center;
+            padding: 15px 20px;
+            border-bottom: 2px solid   #26663b;
+        }
+
+        /* Header kedua untuk navigasi */
+        #header-2 {
+            display: flex;
+            justify-content: center;
+            background-color:  #26663b;
+            padding: 10px 0;
+        }
+
+        #header-2 nav {
+            display: flex;
+            gap: 10px;
+        }
+
+        #header-2 nav a {
+            text-decoration: none;
+            color: #fff;
+            padding: 10px 20px;
+            background-color: transparent;
+            font-size: 16px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        #header-2 nav a:hover {
+            background-color: #26663b;
+            transform: translateY(-2px);
+        }
+
+        /* Kontainer utama */
+        .container {
+            max-width: 900px;
+            margin: auto;
+            padding: 20px;
+            background: hsl(121, 19%, 47%);
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.987);
+        }
+
+        /* Tombol yang muncul untuk memilih kategori */
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        button {
+            flex: 1;
+            margin: 0 10px;
+            padding: 10px 15px;
+            background-color: hsl(121, 19%, 47%);
+            color: rgb(255, 255, 255);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: hsl(121, 19%, 47%);
+            transform: translateY(-2px);
+        }
+
+        /* Kartu untuk konten */
+        .card-container {
+            display: none;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .card {
+            background: #68c565;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin: 10px;
+            padding: 20px;
+            flex: 1 1 calc(30% - 20px);
+            box-sizing: border-box;
+            transition: transform 0.3s;
+            text-align: center;
+            height: 350px;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card img {
+            width: 80px;
+            height: 120px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid rgb(255, 255, 255);
+        }
+
+        th {
+            background-color: hsl(134, 84%, 7%);
+            color: rgb(255, 255, 255);
+        }
+
+        /* Jadwal Pelajaran */
+        #jadwalPelajaran {
+            display: none; /* Awalnya tersembunyi */
+            background-color: #ffffff; /* Hijau Tosca */
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        #jadwalPelajaran table {
+            background-color: #68c565;
+        }
+
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .gallery img {
+            width: calc(33% - 10px);
+            margin-bottom: 10px;
+            border-radius: 5px;
+            transition: transform 0.3s;
+        }
+
+        .gallery img:hover {
+            transform: scale(1.05);
+        }
+    </style>
+    <script>
+        function toggleCards(cardType) {
+            const cardContainers = ['siswaCards', 'guruCards', 'piketCards', 'strukturCards', 'gallery', 'jadwalPelajaran', 'kegiatanKelas'];
+
+            // Sembunyikan semua kartu
+            cardContainers.forEach(id => {
+                const container = document.getElementById(id);
+                if (container) {
+                    container.style.display = id === cardType ? "flex" : "none";
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+
+    <!-- Header pertama untuk judul -->
+    <header id="header-1">
+        <div class="container">
+            <div style="display: flex; align-items: center;justify-content: center; text-align: center;gap: 10px;">
+                <!--logo kiri-->
+                <img src="logo smk.png"alt="logo kiri"style="width:85px;height:auto;">
+                <!--Tulisan-->
+                <div>
+                    <h1>SMKN TAMBAKBOYO</h1>
+                    <h1>Selamat Datang di WebSite Kelas</h1>
+                    <h1>X TPM 1</h1>
+                </div>
+                <!--logo kanan-->
+                <img src="logo tpm.png"alt="logo kanan"style="width:80px; height: auto;">
+            </div>
+    </header>
+    
+    <!-- Header kedua untuk navigasi -->
+    <header id="header-2">
+        <nav>
+            <a href="javascript:void(0);" onclick="toggleCards('siswaCards')">Data Siswa</a>
+            <a href="javascript:void(0);" onclick="toggleCards('guruCards')">Data Guru</a>
+            <a href="javascript:void(0);" onclick="toggleCards('piketCards')">Piket Kelas</a>
+            <a href="javascript:void(0);" onclick="toggleCards('strukturCards')">Struktur Kelas</a>
+            <a href="javascript:void(0);" onclick="toggleCards('gallery')">Galeri Foto</a>
+            <a href="javascript:void(0);" onclick="toggleCards('jadwalPelajaran')">Jadwal Pelajaran</a>
+            <a href="javascript:void(0);" onclick="toggleCards('kegiatanKelas')">Kegiatan Kelas</a>
+        </nav>
+    </header>
+
+        <div id="siswaCards" class="card-container">
+            <div class="card">
+                <img src="abdul rohman.jpg" alt="Foto NAIMAN MUHAMMAD DIAN">
+                <h3>Abdul Rokhman Septama Yoga</h3>
+                <p>Kelas:10 TPM 1</p>
+                <p>Alamat: Purworejo</p>
+                <p>Tanggal Lahir:31-08-2008</p>
+                <p>NISN:0086954167</p>
+            </div>
+            <div class="card">
+                <img src="absen02.jpg" alt="Foto NAIMAN MUHAMMAD DIAN ">
+                <h3>Achmad Achsanul Huda</h3>
+                <p>Kelas: 10 TPM 1</p>
+                <P>Alamat: Glondonggede</P>
+                <p>Tanggal Lahir:02-10-2008</p>
+                <P>NISN:0087866724</P>
+            </div>
+            <div class="card">
+                <img src="yanto.jpg" alt="Foto NAIMAN MUHAMMAD DIAN ">
+                <h3>Achmad Sugianto</h3>
+                <p>Kelas: 10 TPM 1</p>
+                <P>Alamat: Kenanti</P>
+                <p>Tanggal Lahir:11-01-2008</p>
+                <P>NISN:0086954167</P>
+            </div>
+            <div class="card">
+                <img src="agung.jpg" alt="Foto NAIMAN MUHAMMAD DIAN ">
+                <h3>Agung Dharmawan</h3>
+                <p>Kelas: 10 TPM 1</p>
+                <P>Alamat: Gadon</P>
+                <p>Tanggal Lahir:03-11-2008</p>
+                <P>NISN:0081064491</P>
+            </div>
+            <div class="card">
+                <img src="abii.jpg" alt="Foto Adtya Pratama Putra Wahyudianto">
+                <h3>Ahmad Abi Al-Maliki</h3>
+                <p>Kelas: 10 TPM 1</p>
+                <P>Alamat: Purworejo</P>
+                <p>Tanggal Lahir:16-11-2008</p>
+                <P>NISN:0087075680</P>
+            </div>
+            <div class="card">
+                <img src="dwi candra.jpg" alt="Foto Adtya Pratama Putra Wahyudianto">
+                <h3>Ahmad Dwi Candra</h3>
+                <p>Kelas: 10 TPM 1</p>
+                <P>Alamat: Sobontoro</P>
+                <p>Tanggal Lahir:10-07-2008</p>
+                <P>NISN:0081864665</P>
+            </div>
+            <div class="card">
+                <img src="nabil.jpg" alt="Foto Afdhal Ulum">
+                <h3>Ahmad Nabil Adriyansyah</h3>
+                <p>Kelas: 10 TPM 1</p>
+                <P>Alamat: Temaji</P>
+                <p>Tanggal Lahir:16-06-2008</p>
+                <P>NISN:0088442669</P>
+            </div>
+            <div class="card">
+                <img src="dhoni.jpg" alt="Foto Ahmad Arif Muzaki">
+                <h3>Ahmad Septya Romadhon</h3>
+                <p>Kelas: 10 TPM 1</p>
+                <P>Alamat: Temaji</P>
+                <p>Tanggal Lahir:22-09-2009</p>
+                <P>NISN:0095768512</P>
+            </div>
+            <div class="card">
+                <img src="shahida.jpg" alt="Foto Ahmad Risky Putra Indrawan">
+                <h3>Ahmad Shahida Firmansyah</h3>
+                <p>Kelas: 10 TPM 1</p>
+                <P>Alamat: Pulogede</P>
+                <p>Tanggal Lahir:16-08-2008</p>
+                <P>NISN:0087006290</P>
+            </div>
+            <div class="card">
+                <img src="fadli.jpg" alt="Foto Ahmad Zaenal Prayogi">
+                <h3>Ahmat Fadli</h3>
+                <p>Kelas: 10 TPM 1</p>
+                <P>Alamat: Belikanget</P>
+                <p>Tanggal Lahir:26-09-2008</p>
+                <P>NISN:0081549550</P>
+            </div>
+            <div class="card">
+                <img src="alin.jpg" alt="Foto Ahmad Zaenal Prayogi">
+                <h3>Alin Maulana Salfa</h3>
+                <p>Kelas: 10 TPM 1</p>
+                <P>Alamat: Cokrowati</P>
+                <p>Tanggal Lahir:17-10-2008</p>
+                <P>NISN:0082931454</P>
+            </div>
+            <div class="card">
+                <img src="andika.jpg" alt="Foto Ahmad Zaeni">
+                <h3>Andika Dwi Saputra</h3>
+                <p>Kelas: 10 TPM 1</p>
+                <P>Alamat: Sawir</P>
+                <p>Tanggal Lahir:14-032007</p>
+                <P>NISN:0072057776</P>
+            </div>
+            <div class="card">
+                <img src="andriyan.jpg" alt="Foto Aldi Rahmaka">
+                <h3>Andriyan Saputra</h3>
+                <p>Kelas: 10 TPM 1</p>
+                <P>Alamat: Temaji</P>
+                <p>Tanggal Lahir:07-04-2008</p>
+                <P>NISN:0089161523</P>
+            </div>
+            <div class="card">
+                <img src="aqilla.jpg" alt="Foto Aldi Rizki Utomo">
+                <h3>Aqilla Fairuuz Nizar</h3>
+                <p>Kelas: 10 Tpm 1</p>
+                <P>Alamat: Mander</P>
+                <p>Tanggal Lahir:05-05-2008</p>
+                <P>NISN:0085090859</P>
+            </div>
+            <div class="card">
+                <img src="valen.jpg" alt="Foto Alfin Maulana">
+                <h3>Arsya Raka Valent Aurelliyan</h3>
+                <p>Kelas: 10 TPM 1</p>
+                <P>Alamat: Purworejo</P>
+                <p>Tanggal Lahir:18-06-2008</p>
+                <P>NISN:0089315454</P>
+            </div>
+            <div class="card">
+                <img src="candra wahyu.jpg" alt="Foto Andik Saputro">
+                <h3>Candra Wahyu Utomo</h3>
+                <p>Kelas: 10 TPM 1</p>
+                <P>Alamat: Klutuk</P>
+                <p>Tanggal Lahir:22-08-2008</p>
+                <P>NISN:0087175507</P>
+            </div>
+            <div class="card">
+                <img src="cendrik.jpg" alt="Foto Andika Adi Pratama">
+                <h3>Cendrik NUR Radityawi</h3>
+                <p>Kelas: 10 TPM 1</p>
+                <P>Alamat: Sumergeneng</P>
+                <p>Tanggal Lahir:01-10-2008</p>
+                <P>NISN:3081741866</P>
+            </div>
+            <div class="card">
+                <img src="dadang.jpg" alt="Foto Andika Ardi Anto">
+                <h3>Dadang Kurniawan P.S</h3>
+                <p>Kelas: 10 tpm 1</p>
+                <P>Alamat: Belikanget</P>
+                <p>Tanggal Lahir:12-02-2009</p>
+                <P>NISN:3097322851</P>
+            </div>
+            <div class="card">
+                <img src="denny.jpg" alt="Foto Ardian Dwi Nugroho">
+                <h3>Denny Fachrian</h3>
+                <p>Kelas: 10 TPM 1</p>
+                <P>Alamat: Mentoso</P>
+                <p>Tanggal Lahir:25-04-2009</p>
+                <P>NISN:0091436669</P>
+            </div>
+            <div class="card">
+                <img src="denova.jpg" alt="Foto Azzam Maulana">
+                <h3>Denova Akmalul Karim</h3>
+                <p>Kelas: 10 TPM 1</p>
+                <P>Alamat: Deket kulon</P>
+                <p>Tanggal Lahir:24-03-2009</p>
+                <P>NISN:0091728948</P>
+            </div>
+            <div class="card">
+                <img src="dikaa.jpg" alt="Foto Bagus Candra">
+                <h3>Dika Antoni</h3>
+                <p>Kelas: 10 TPM 1</p>
+                <P>Alamat: Klutuk</P>
+                <p>Tanggal Lahir:08-03-2009</p>
+                <P>NISN:0093704429</P>
+            </div>
+            <div class="card">
+                <img src="fahri.jpg" alt="Foto Ahmad Zaenal Prayogi">
+                <h3>Fahri Al Faiz</h3>
+                <p>Kelas: 10 TPM 1</p>
+                <P>Alamat: Tasikharjo</P>
+                <p>Tanggal Lahir:16-10-2008</p>
+                <P>NISN:0088484777</P>
+            </div>
+            <div class="card">
+                <img src="aldoo.jpg" alt="Foto Ahmad Zaenal Prayogi">
+                <h3>Fatho Revaldo</h3>
+                <p>Kelas: 10 TPM 1</p>
+                <P>Alamat: Temaji</P>
+                <p>Tanggal Lahir:14-07-2008</p>
+                <P>NISN:0089304211</P>
+            </div>
+            <div class="card">
+                <img src="ghufron.jpg" alt="Foto Ahmad Zaenal Prayogi">
+                <h3>Ghufron David Setiawan</h3>
+                <p>Kelas: 10 TPM 1</p>
+                <P>Alamat:Sumberan</P>
+                <p>Tanggal Lahir:26-07-2008</p>
+                <P>NISN:0085261637</P>
+            </div>
+            <div class="card">
+                <img src="hendi.jpg" alt="Foto Dimas Rian">
+                <h3>Hendi Pranata</h3>
+                <p>Kelas: 10 TPM 1</p>
+                <P>Alamat: Wolutengah</P>
+                <p>Tanggal Lahir:18-02-2010</p>
+                <P>NISN:0109733695</P>
+            </div>
+            <div class="card">
+                <img src="ikhsan.jpg" alt="Foto Eko Prasetyo">
+                <h3>Iksan Afandi</h3>
+                <p>Kelas: 10 TPM 1</p>
+                <P>Alamat:Sawir</P>
+                <p>Tanggal Lahir:01-07-2008</p>
+                <P>NISN:0087506014</P>
+            </div>
+            <div class="card">
+                <img src="julius.jpg" alt="Foto Eko Rahman">
+                <h3>Julius Dwi Santoso</h3>
+                <p>Kelas: 10 TPM 1</p>
+                <P>Alamat: Tambakboyo</P>
+                <p>Tanggal Lahir:18-07-2007</p>
+                <P>NISN:0076744641</P>
+            </div>
+            <div class="card">
+                <img src="khoirut.jpg" alt="Foto Evan Reza">
+                <h3>Khoirut Taman</h3>
+                <p>Kelas: 10 TPM 1</p>
+                <P>Alamat:Dasin</P>
+                <p>Tanggal Lahir:28-07-2007</p>
+                <P>NISN:0078546004</P>
+            </div>
+            <div class="card">
+                <img src="kholis.jpg" alt="Foto Farhan">
+                <h3>Kholis Waqid Afrizal</h3>
+                <p>Kelas: 10 TPM 1</p>
+                <P>Alamat:Cokrowati</P>
+                <p>Tanggal Lahir:21-12-2008</p>
+                <P>NISN:0082689435</P>
+            </div>
+            <div class="card">
+                <img src="krisna.jpg" alt="Foto Fathur">
+                <h3>Krisna Sukma Wijaya</h3>
+                <p>Kelas: 10 TPM 1</p>
+                <P>Alamat:Temaji</P>
+                <p>Tanggal Lahir:04-12-2008</p>
+                <P>NISN:0083909319</P>
+            </div>
+            <div class="card">
+                <img src="lucky.jpg" alt="Foto Geri">
+                <h3>Lucky Romadhoni</h3>
+                <p>Kelas: 10 TPM 1</p>
+                <P>Alamat:Karangrejo</P>
+                <p>Tanggal Lahir:18-09-2009</p>
+                <P>NISN:0098467967</P>
+            </div>
+            <div class="card">
+                <img src="lutfi.jpg" alt="Foto Gilang">
+                <h3>Lutfi Rohman</h3>
+                <p>Kelas: 10 TPM 1</p>
+                <P>Alamat:Klutuk</P>
+                <p>Tanggal Lahir:121-08-2008</p>
+                <P>NISN:0088560533</P>
+            </div>
+            <div class="card">
+                <img src="m iqbal.jpg" alt="Foto Gilang">
+                <h3>M.Iqbal Sarifudin</h3>
+                <p>Kelas: 10 TPM 1</p>
+                <P>Alamat:Bancar</P>
+                <p>Tanggal Lahir:21-12-2007</p>
+                <P>NISN:3076794333</P>
+            </div>
+            <div class="card">
+                    <img src="m fariz.jpg" alt="Foto Gilang">
+                    <h3>M.Fariz Iqbal Rojabi</h3>
+                    <p>Kelas: 10 TPM 1</p>
+                    <P>Alamat:Remen</p>
+                    <p>Tanggal Lahir:08-07-2008</p>
+                    <P>NISN:0089090051</P>
+          </div>
+          <div class="card">
+            <img src="raffi.jpg" alt="Foto Gilang">
+            <h3>M.Raffi Ubaidillah</h3>
+            <p>Kelas: 10 TPM 1</p>
+            <P>Alamat: Tambakboyo</P>
+            <p>Tanggal Lahir:02-01-2009</p>
+            <P>NISN:3095477056</P>
+          </div>
+          <div class="card">
+            <img src="ebii.jpg" alt="Foto Gilang">
+            <h3>M.Safrudin Sarwana Adabi Nahari</h3>
+                <p>Kelas: 10 TPM 1</p>
+                <P>Alamat:Merkawang</P>
+                <p>Tanggal Lahir:23-05-2009</p>
+                <P>NISN:0091745273</P>
+          </div>
+          </div>
+        <div id="guruCards" class="card-container">
+            <div class="card">
+                <img src="pakadim.jfif" alt="Foto Ahmad Zainuri">
+                <h3>NUR ADHIM, S.Pd., Gr.</h3>
+                <p>Jabatan: Guru Penjaskes</p>
+                <p>Alamat : Ds. Sumurgung, Kec. Palang, Kab. Tuban</p>
+            </div>
+            <div class="card">
+                <img src="bucandra.jfif" alt="Foto Ainun Nisa">
+                <h3>CANDRA WULANDARI, S.Pd., Gr.</h3>
+                <p>Jabatan: Guru Matematika</p>
+                <p>Alamat : Pulogede, Kec. Tambakboyo</p>
+            </div>
+            <div class="card">
+                <img src="busofi.jfif" alt="Foto Nuranisah">
+                <h3>SITI SOFIATUN, S.S., S.Pd.</h3>
+                <p>Jabatan: Guru Bahasa Inggris</p>
+               <p>Alamat: Latsari, Kec. Tuban</p>
+            </div>
+            <div class="card">
+                <img src="pakantony.jfif" alt="Foto Nuranisah">
+                <h3>ANTHONY SALIM MASRIKAN, S.Pd</h3>
+                <p>Jabatan: Guru Produktif</p>
+                <p>Alamat : Bojonegoro</p>
+            </div>
+            <div class="card">
+                <img src="pak umam.jfif" alt="Foto Nuranisah">
+                <h3>KHOTIBUL UMAM, S.Pd.</h3>
+                <p>Jabatan: Guru Produktif</p>
+                <p>Alamat: Kali Untu Kec. Jenu</p>
+            </div>
+            <div class="card">
+                <img src="pak rasmu.jfif" alt="Foto Nuranisah">
+                <h3>RASMU,S.PD</h3>
+                <p>Jabatan: Guru PAI</p>
+                <P>Alamat : Ds. Temayang, Kec. Kerek, Kab. Tuban</P>
+            </div>
+            <div class="card">
+                <img src="bujungga.jfif" alt="Foto Nuranisah">
+                <h3>Bu Jungga Nanda Putri Susrivani</h3>
+                <p>Jabatan: Guru Seni</p>
+                <P>Alamat : Ds. Baturetno, Kec. Tuban, Kab. Tuban</P>
+            </div>
+            <div class="card">
+                <img src="buyulia.jfif" alt="Foto Nuranisah">
+                <h3>Bu Yulia Suci Lusiana</h3>
+                <p>Jabatan: Guru Bimbingan Konslin</p>
+                <P>Alamat : Tasikharjo, Kec. Jenu</P>
+            </div>
+            <div class="card">
+                <img src="buwahyu.jfif" alt="Foto Nuranisah">
+                <h3>Bu Siti Wahyuningsih</h3>
+                <p>Jabatan: Guru  PPKN</p>
+                <P>Alamat : Montong</P>
+            </div>
+            <div class="card">
+                <img src="pakarno.jfif" alt="Foto Nuranisah">
+                <h3>Pak Suwarno</h3>
+                <p>Jabatan: Guru Informatika</p>
+                <P>Alamat : Tegalrejo, Kec. Merakurak</P>
+            </div>
+            <div class="card">
+                <img src="paksopa.jfif" alt="Foto Nuranisah">
+                <h3>Pak Hidayatul Mustofa</h3>
+                <p>Jabatan: Guru Bahasa Indonesia</p>
+                <P>Alamat : Padasan, Kec. Kerek</P>
+            </div>
+            <div class="card">
+                <img src="burida.jfif" alt="Foto Nuranisah">
+                <h3>Bu Ridha Novitasari</h3>
+                <p>Jabatan: Guru Bahasa Jawa</p>
+                <P>Alamat : Siding, Kec. Bancar</P>
+            </div>
+            <div class="card">
+                <img src="buyuni.jfif" alt="Foto Nuranisah">
+                <h3>Bu Yuni Pobco H</h3>
+                <p>Jabatan: Guru ipas</p>
+                <P>Alamat : Karang, Kec. Semanding-Tuban</P>
+            </div>
+            <div class="card">
+                <img src="bututik.jfif" alt="Foto Nuranisah">
+                <h3>Bu Tutik Karlina</h3>
+                <p>Jabatan: Guru Sejarah</p>
+                <P>Alamat: Bancar</P>
+            </div>
+
+        </div>
+        <div id="piketCards" class="card-container">
+            <div class="card">
+                <h3>Senin</h3>
+                <p> Abdul Rokhman Septama Yoga</p>
+                <p> Achmad Achsanul Huda</p>
+                <p> Achmad Sugianto</p>
+                <p> Agung Dharmawan</p>
+                <p> Ahmad Abi Almaliki</p>
+                <p> Ahmad Dwi Candra</p>
+                <p> Ahmad Nabil Ardiansyah</p>
+                <p> Ahmad Septya Romadhoni</p>
+            </div>
+            <div class="card">
+                <h3>Selasa</h3>
+                <p> Ahmad Shahida Firmansyah</p>
+                <p> Ahmat Fadli</p>
+                <p> Alin Maula Salfa</p>
+                <p> Andika Dwi Saputra</p>
+                <p> Andriyan Saputra</p>
+                <p> Aqilla Fairuuz Nizar</p>
+                <p> Arsya Raka Valent Aurellyan</p>
+            </div>
+            <div class="card">
+                <h3>Rabu</h3>
+                <p> Candra Wahyu Utomo</p>
+                <p> Cendrik Nur Raditya</p>
+                <p> Dadang Kurniawan P.S</p>
+                <p> Denny Fachriyan</p>
+                <p> Dika Antoni</p>
+                <p> Fahri Al Faiz</p>
+            </div>
+            <div class="card">
+                <h3>Kamis</h3>
+                <p> Fatho Revaldo</p>
+                <p> Ghufron David Setiawan</p>
+                <p> Hendi Pranata</p>
+                <p> Iksan Afandi</p>
+                <p> Julius Dwi Santoso</p>
+                <p> Khoirut Taman</p>    
+           </div>
+           <div class="card">
+                <h3>Jumat</h3>
+                <p> Kholis Waqid Afrizal</p>
+                <p> Lucky Rohmadhoni</p>
+                <p> Lutfi Rohman</p>
+                <p> M.Fariz Iqbal Rojali</p>
+                <p> M. Raffi Ubadllah</p>
+                <p> M. Safrudin Sarwana Adabi N.N</p>
+           </div>
+         </div>
+
+         <div id="strukturCards" class="card-container">
+            <div class="card">
+                <img  src="pakagus.jfif" alt="foto Kepala Sekolah">
+                <h3>Kepala Sekolah</h3>
+                <P>AGUS SISWANTO, S.Pd., M.Pd.</P>
+                <P>Jabatan : Kepala Sekolah</P>
+                <P>Alamat : Kel. Gedungombo Kec. Semanding - Tuban</P>
+            </div>
+            <div class="card">
+                <img src="burida.jfif" alt="Foto Nuranisah">
+                <h3>Wali Kelas</h3>
+                <h3>Bu Ridha Novitasari</h3>
+                <p>Jabatan: Guru Bahasa Jawa</p>
+                <P>Alamat : Siding, Kec. Bancar</P>
+            </div>
+            <div class="card">
+                <img src="pakfathu.jfif" alt="foto Kepala Jurusan">
+                <h3>Kepala Jurusan</h3>
+                <p>MOH. FATHU RAHMAN AFANDI, S.Pd</p>
+                <P>Jabatan : Guru dan Kakonsli Teknik Pemesinan</P>
+                <P>Alamat : Jenggolo, Kec. Jenu</P>
+            </div>
+            <div class="card">
+                <img src="aldoo.jpg" alt="Foto Ahmad Zaenal Prayogi">
+                <h3>Ketua Kelas</h3>
+                <h3>Fatho Revaldo</h3>
+                <p>Kelas: 10 TPM 1</p>
+                <P>Alamat: Temaji</P>
+            </div>
+            <div class="card">
+                <img src="valen.jpg" alt="Foto Alfin Maulana">
+                <h3>Wakil Ketua kelas</h3>
+                <h3>Arsya Raka Valent Aurelliyan</h3>
+                <p>Kelas: 10 TPM 1</p>
+                <P>Alamat: Purworejo</P>
+            </div>
+            <div class="card">
+                <img src="julius.jpg" alt="Foto Eko Rahman">
+                <h3>Sekertaris 1</h3>
+                <h3>Julius Dwi Santoso</h3>
+                <p>Kelas: 10 TPM 1</p>
+                <P>Alamat: Tambakboyo</P>
+            </div>
+            <div class="card">
+                <img src="dadang.jpg" alt="Foto Andika Ardi Anto">
+                <h3>Sekertaris 2</h3>
+                <h3>Dadang Kurniawan P.S</h3>
+                <p>Kelas: 10 tpm 1</p>
+                <P>Alamat: Belikanget</P>
+            </div>
+            <div class="card">
+                <img src="agung.jpg" alt="Foto NAIMAN MUHAMMAD DIAN ">
+                <h3>Bendahara 1</h3>
+                <h3>Agung Dharmawan</h3>
+                <p>Kelas: 10 TPM 1</p>
+                <P>Alamat: Gadon</P>
+            </div>
+            <div class="card">
+                <img src="shahida.jpg" alt="Foto Ahmad Risky Putra Indrawan">
+                <h3>Bendahara 2</h3>
+                <h3>Ahmad Shahida Firmansyah</h3>
+                <p>Kelas: 10 TPM 1</p>
+                <P>Alamat: Pulogede</P>
+            </div>
+        </div>
+       
+        <div id="gallery" class="gallery">
+            <img src="ftpbareng1.jfif" alt="Foto Kegiatan 1">
+            <img src="ftobareng2.jfif" alt="Foto Kegiatan 2">
+            <img src="bengkeltpm.jfif" alt="Foto Kegiatan 3">
+        </div>
+
+        <div id="jadwalPelajaran" class="card-container">
+            <table style="width: 100%; border-collapse: collapse; text-align: center; font-family: Arial, sans-serif;">
+                <thead>
+                    <tr style="background-color: rgb(4, 84, 14); color: white;">
+                        <th style="padding: 10px; border: 1px solid #ddd;">Hari</th>
+                        <th style="padding: 10px; border: 1px solid #ddd;">Pelajaran</th>
+                        <th style="padding: 10px; border: 1px solid #ddd;">Waktu</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Senin -->
+                    <tr style="background-color: rgb(106, 172, 128);">
+                        <td rowspan="4" style="padding: 10px; border: 1px solid #ddd;">Senin</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">PJOK</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">07:00 - 09:00</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd;">PAI</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">09:00 - 12:00</td>
+                    </tr>
+                    <tr style="background-color: rgb(106, 172, 128);">
+                        <td style="padding: 10px; border: 1px solid #ddd;">Matematika</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">12:30 - 13:50</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd;">B. Indonesia</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">13:50 - 15:10</td>
+                    </tr>
+        
+                    <!-- Selasa -->
+                    <tr style="background-color: rgb(106, 172, 128);">
+                        <td rowspan="2" style="padding: 10px; border: 1px solid #ddd;">Selasa</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Produktif TPM</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">07:00 - 09:00</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Produktif TPM</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">09:00 - 15:10</td>
+                    </tr>
+        
+                    <!-- Rabu -->
+                    <tr style="background-color: rgb(106, 172, 128);">
+                        <td rowspan="6" style="padding: 10px; border: 1px solid #ddd;">Rabu</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Seni</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">07:00 - 08:20</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd;">BK</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">08:20 - 09:00</td>
+                    </tr>
+                    <tr style="background-color: rgb(106, 172, 128);">
+                        <td style="padding: 10px; border: 1px solid #ddd;">PKN</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">09:00 - 10:00</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd;">B. Inggris</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">10:00 - 12:00</td>
+                    </tr>
+                    <tr style="background-color: rgb(106, 172, 128);">
+                        <td style="padding: 10px; border: 1px solid #ddd;">Informatika</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">12:30 - 13:50</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd;">B. Indonesia</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">13:50 - 15:10</td>
+                    </tr>
+        
+                    <!-- Kamis -->
+                    <tr style="background-color: rgb(106, 172, 128);">
+                        <td rowspan="5" style="padding: 10px; border: 1px solid #ddd;">Kamis</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">B. Jawa</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">07:00 - 08:20</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd;">IPAS</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">08:20 - 10:40</td>
+                    </tr>
+                    <tr style="background-color: rgb(106, 172, 128);">
+                        <td style="padding: 10px; border: 1px solid #ddd;">B. Indonesia</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">10:40 - 12:00</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Matematika</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">12:30 - 13:50</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd;">Sejarah</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">13:50 - 15:10</td>
+                    </tr>
+        
+                    <!-- Jumat -->
+                    <tr style="background-color:rgb(106, 172, 128);">
+                        <td rowspan="3" style="padding: 10px; border: 1px solid #ddd;">Jumat</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">B5-TPM</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">07:00 - 07:40</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd;">IPAS</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">07:40 - 09:40</td>
+                    </tr>
+                    <tr style="background-color: rgb(106, 172, 128);">
+                        <td style="padding: 10px; border: 1px solid #ddd;">Informatika</td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">10:00 - 11:20</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div id="kegiatanKelas" class="container">
+            <table>
+                <tr>
+                    <th>Tanggal</th>
+                    <th>Kegiatan</th>
+                    <th>Deskripsi</th>
+                </tr>
+                <tr>
+                    <td>2 Minggu 1X</td>
+                    <td>Jumat Reliji</td>
+                    <td>Isthighosyah dan acara lainnya</td>
+                </tr>
+                <tr>
+                    <td>28 November 2024</td>
+                    <td>Puncak P5</td>
+                    <td>Membangun jiwa dan raga kita</td>
+                </tr>
+            </table>
+        </div>
+        
+        
+        
+    </div>
+</body>
+</html>
